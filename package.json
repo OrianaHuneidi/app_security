@@ -13,10 +13,12 @@
     "postinstall": "quasar prepare"
   },
   "dependencies": {
+    "@quasar/extras": "^1.16.4",
+    "@tailwindcss/vite": "^4.0.9",
     "axios": "^1.2.1",
     "pinia": "^3.0.1",
-    "@quasar/extras": "^1.16.4",
     "quasar": "^2.16.0",
+    "tailwindcss": "^4.0.9",
     "vue": "^3.4.18",
     "vue-router": "^4.0.0"
   },

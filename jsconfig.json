@@ -1,3 +1,17 @@
 {
-  "extends": "./.quasar/tsconfig.json"
+  "extends": "./.quasar/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/view/components/*"],
+      "@layouts/*": ["./src/view/layouts/*"],
+      "@pages/*": ["./src/view/pages/*"],
+      "@boot/*": ["./src/boot/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@store/*": ["./src/store/*"], 
+      "@router/*": ["./src/router/*"]
+    }
+  }
 }

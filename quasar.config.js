@@ -2,6 +2,8 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
 import { defineConfig } from '#q-app/wrappers'
+import tailwindcss from '@tailwindcss/vite'
+import path from 'path';
 
 export default defineConfig((/* ctx */) => {
   return {
@@ -20,7 +22,8 @@ export default defineConfig((/* ctx */) => {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: [
-      'app.scss'
+      'app.scss',
+      'style.css',
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -60,7 +63,23 @@ export default defineConfig((/* ctx */) => {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf (viteConf) { 
+        viteConf.resolve.alias = {
+          ...viteConf.resolve.alias,
+          '@': path.resolve(__dirname, 'src'),
+          '@view': path.resolve(__dirname, 'src/view'),
+          '@components': path.resolve(__dirname, 'src/view/components'),
+          '@layouts': path.resolve(__dirname, 'src/view/layouts'),
+          '@pages': path.resolve(__dirname, 'src/view/pages'),
+          '@assets': path.resolve(__dirname, 'src/assets'),
+          '@boot': path.resolve(__dirname, 'src/boot'),
+          '@store': path.resolve(__dirname, 'src/store'),
+          '@router': path.resolve(__dirname, 'src/router'),
+          '@utils': path.resolve(__dirname, 'src/utils'),
+          '@composable': path.resolve(__dirname, 'src/composable'),
+        }
+        viteConf.plugins?.push(tailwindcss())
+      },
       // viteVuePluginOptions: {},
       
       // vitePlugins: [
@@ -97,8 +116,8 @@ export default defineConfig((/* ctx */) => {
     animations: [],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#sourcefiles
-    // sourceFiles: {
-    //   rootComponent: 'src/App.vue',
+      sourceFiles: {
+      rootComponent: 'src/view/App.vue', 
     //   router: 'src/router/index',
     //   store: 'src/store/index',
     //   pwaRegisterServiceWorker: 'src-pwa/register-service-worker',
@@ -107,7 +126,7 @@ export default defineConfig((/* ctx */) => {
     //   electronMain: 'src-electron/electron-main',
     //   electronPreload: 'src-electron/electron-preload'
     //   bexManifestFile: 'src-bex/manifest.json
-    // },
+     },
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
     ssr: {
