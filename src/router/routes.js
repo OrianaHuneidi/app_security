@@ -8,6 +8,8 @@ const routes = [
       { path: 'configuraciones', component: () => import('@pages/ConfiguracionPage.vue') },
       { path: 'informacion', component: () => import('@pages/InformacionPage.vue') },
       { path: 'inicio-sesion', component: () => import('@pages/InicioSessionPage.vue') },
+      { path: 'registro', component: () => import('@pages/RegistroDeSessionPage.vue') },
+
     ]
   },
 
