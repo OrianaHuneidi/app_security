@@ -8,7 +8,7 @@ import path from 'path';
 export default defineConfig((/* ctx */) => {
   return {
     bin: {
-      linuxAndroidStudio: '/usr/local/bin/studio.sh' // <-- Ruta a tu script
+      linuxAndroidStudio: '/home/dan/android-studio/bin/studio.sh',
     },
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -47,7 +47,7 @@ export default defineConfig((/* ctx */) => {
         node: 'node20'
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -73,7 +73,7 @@ export default defineConfig((/* ctx */) => {
           '@pages': path.resolve(__dirname, 'src/view/pages'),
           '@assets': path.resolve(__dirname, 'src/assets'),
           '@boot': path.resolve(__dirname, 'src/boot'),
-          '@store': path.resolve(__dirname, 'src/store'),
+          '@stores': path.resolve(__dirname, 'src/stores'),
           '@router': path.resolve(__dirname, 'src/router'),
           '@utils': path.resolve(__dirname, 'src/utils'),
           '@composable': path.resolve(__dirname, 'src/composable'),
@@ -108,7 +108,7 @@ export default defineConfig((/* ctx */) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Loading', 'Notify', 'Dialog'],
     },
 
     // animations: 'all', // --- includes all animations

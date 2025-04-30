@@ -27,14 +27,14 @@
       />
       <div class="!flex !items-center !justify-center w-full fixed !bottom-15">
         <q-btn
-          label="Inicio de sesión"
+          label="Cerrar sesión"
           flat
           no-caps
           round
           dense
           class="!rounded-full !mb-4 !px-6 !bg-gradient-to-r !bg-[#ffa3ee] !min-w-[20px] !pl-6"
           size="lg"
-          to="/inicio-sesion"
+          @click="logout()"
         />
       </div>
     </q-list>
@@ -44,8 +44,13 @@
 <script setup>
 import EssentialLink from "@components/EssentialLink.vue";
 import menuComposable from "@composable/menu.composable.js";
+import { useUserStore } from "src/stores/users";
+import { useRouter } from "vue-router";
 import { ref } from "vue";
+
 const { leftDrawerOpen } = menuComposable();
+const storeUser = useUserStore();
+const router = useRouter();
 
 const linksList = [
   {
@@ -53,6 +58,12 @@ const linksList = [
     caption: "",
     icon: "",
     link: "/",
+  },
+  {
+    title: "Perfil",
+    caption: "",
+    icon: "",
+    link: "/perfil",
   },
   {
     title: "Configuraciones",
@@ -73,6 +84,12 @@ const linksList = [
     link: "/informacion",
   },
 ];
+
+const logout = async () => {
+  await storeUser.logout().then(() => {
+    setTimeout(() => router.push({ name: "login" }), 200);
+  });
+};
 
 const viewportWidth = ref(window.innerWidth);
 // Ejemplo: 1200 (depende del zoom o tamaño de ventana)

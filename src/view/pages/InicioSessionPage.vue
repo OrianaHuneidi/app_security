@@ -5,114 +5,101 @@
       @reset.prevent.stop="onReset"
       class="q-gutter-md"
     >
-      <q-input
-        ref="nameRef"
-        filled
-        v-model="name"
-        label="Name"
-        lazy-rules
-        :rules="nameRules"
-        standout="bg-purple-6 text-white"
-      />
+      <h1 class="text-center text-purple-8 text-h4">Inicio De Sesión</h1>
 
       <q-input
-        ref="ageRef"
+        ref="emailRef"
         filled
         type="email"
-        v-model="age"
+        v-model="email"
         label="Correo"
         lazy-rules
-        :rules="ageRules"
+        :rules="emailRules"
         standout="bg-purple-6 text-white"
       />
 
       <q-input
-        ref="ageRef"
+        ref="passwordRef"
         filled
         type="password"
-        v-model="age"
+        v-model="password"
         label="Contraseña"
         lazy-rules
-        :rules="ageRules"
+        :rules="passwordRules"
         standout="bg-purple-6 text-white"
       />
       <div>
-        <q-btn label="Submit" type="submit" color="primary" />
+        <q-btn label="Iniciar sesión" type="submit" color="purple-8" />
         <q-btn
-          label="Reset"
+          label="Borrar"
           type="reset"
-          color="primary"
+          color="purple-8"
           flat
           class="q-ml-sm"
         />
       </div>
-      <router-link to="/registro" class="text-primary flex items-center">
-        <q-icon name="person_add" class="q-mr-xs" />
-        <span class="underline-on-hover">Regístrate</span>
-      </router-link>
+      <div class="q-mt-sm text-center">
+        ¿Aún no te has registrado?
+        <router-link to="/registro" class="text-purple-8 text-weight-medium">
+          Hazlo aquí
+        </router-link>
+      </div>
     </form>
   </div>
 </template>
-<script>
+
+<script setup>
+import { useUserStore } from "src/stores/users";
+import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 import { ref } from "vue";
 
-export default {
-  setup() {
-    const $q = useQuasar();
+const storeUser = useUserStore();
+const router = useRouter();
 
-    const name = ref(null);
-    const nameRef = ref(null);
+const $q = useQuasar();
 
-    const age = ref(null);
-    const ageRef = ref(null);
+const email = ref("");
+const emailRef = ref(null);
 
-    const accept = ref(false);
+const password = ref("");
+const passwordRef = ref(null);
 
-    return {
-      name,
-      nameRef,
-      nameRules: [
-        (val) => (val && val.length > 0) || "Por favor, escriba algo",
-      ],
+const emailRules = [
+  (val) => (val !== null && val !== "") || "Por favor, escriba su correo",
+  (val) => /.+@.+\..+/.test(val) || "Por favor, ingrese un correo válido",
+];
 
-      age,
-      ageRef,
-      ageRules: [
-        (val) => (val !== null && val !== "") || "Por favor, escriba su correo",
-        (val) => (val > 0 && val < 100) || "Please type a real age",
-      ],
+const passwordRules = [
+  (val) => (val && val.length > 0) || "Por favor, escriba algo",
+];
 
-      accept,
+const onSubmit = () => {
+  emailRef.value.validate();
+  passwordRef.value.validate();
 
-      onSubmit() {
-        nameRef.value.validate();
-        ageRef.value.validate();
+  if (emailRef.value.hasError || passwordRef.value.hasError) {
+    return;
+  } else {
+    storeUser.login(email.value, password.value).then(() => {
+      $q.notify({
+        icon: "done",
+        color: "positive",
+        message: "Inicio de sesión exitoso",
+      });
 
-        if (nameRef.value.hasError || ageRef.value.hasError) {
-          // form has error
-        } else if (accept.value !== true) {
-          $q.notify({
-            color: "negative",
-            message: "You need to accept the license and terms first",
-          });
-        } else {
-          $q.notify({
-            icon: "done",
-            color: "positive",
-            message: "Submitted",
-          });
-        }
-      },
+      setTimeout(() => router.push({ name: "panel" }), 200);
 
-      onReset() {
-        name.value = null;
-        age.value = null;
+      onReset();
+    });
+  }
+};
 
-        nameRef.value.resetValidation();
-        ageRef.value.resetValidation();
-      },
-    };
-  },
+const onReset = () => {
+  email.value = null;
+  password.value = null;
+
+  emailRef.value.resetValidation();
+  passwordRef.value.resetValidation();
 };
 </script>
