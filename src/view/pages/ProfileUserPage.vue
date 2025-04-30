@@ -1,9 +1,10 @@
 <template>
   <q-page class="q-pa-md">
-    <div class="p-4">
+    <div class="bg-primary w-full h-[360px] absolute top-0 left-0 z-0"></div>
+    <div class="p-4 z-10">
       <q-btn
         size="25px"
-        class="!border !rounded-xl !p-2 !mt-2 !mr-2 !z-50"
+        class="!border !rounded-xl !p-2 !mt-2 !mr-2 !z-50 relative"
         color="black"
         flat
         dense
@@ -14,38 +15,55 @@
       />
     </div>
     <h1
-      class="!text-[20px] !w-full text-secondary !font-medium !text-center !p-0 !m-0 !leading-[70px]"
+      class="!text-[30px] !w-full text-black !font-medium !text-center !px-20 !m-0 !leading-[45px] z-10 relative !-mt-[85px]"
+      black
     >
       Perfil de Usuario
     </h1>
 
-    <div class="row q-col-gutter-md justify-center">
+    <div class="row q-col-gutter-md justify-center !mt-3 z-10 relative">
       <q-avatar size="130px" class="mb-5 w-full">
-        <img src="https://placehold.co/600x600" />
+        <img
+          :src="`https://placehold.co/600x600/white/8F2DFF/?text=${name
+            .split(' ')
+            .map((n, i) => (i < 2 ? n[0].toLocaleUpperCase() : ''))
+            .join('')}`"
+        />
       </q-avatar>
 
       <!-- Formulario de Información Básica -->
       <div class="col-12 col-md-6 text-center">
-        <div class="text-primary w-full inline-block text-2xl -mr-8">
+        <div class="text-purple-9 w-full inline-block text-2xl -mr-8 underline">
           {{ name }}
           <q-icon
             name="edite"
             size="20px"
-            color="primary"
+            color="text-purple-9"
             class="inline ml-2"
             @click="dialogs.basic.toggle()"
           />
         </div>
-        <div class="text-secondary w-full inline-block text-xl mt-3">
-          {{ email }}
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="mt-10 px-10">
+          <b class="text-2xl text-primary">Email</b>
+
+          <div
+            class="text-[#737373] w-full inline-block text-xl mt-3 underline"
+          >
+            {{ email }}
+          </div>
         </div>
-        <q-btn
-          label="Cambiar contraseña"
-          class="!mt-4"
-          color="primary"
-          unelevated
-          @click="dialogs.password.toggle()"
-        />
+
+        <div class="w-full flex justify-center items-center mt-5">
+          <q-btn
+            label="Cambiar contraseña"
+            class="!mt-4 text-purple-9 bg-accent"
+            unelevated
+            @click="dialogs.password.toggle()"
+          />
+        </div>
       </div>
 
       <q-dialog v-model="dialogs.basic.value">
