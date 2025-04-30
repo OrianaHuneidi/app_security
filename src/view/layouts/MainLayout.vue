@@ -3,7 +3,7 @@
     <q-header class="bg-transparent">
       <q-toolbar
         v-if="
-          !['/contactos', '/configuraciones', '/informacion', '/inicio-sesion', '/registro'].includes(
+          !['/contactos', '/configuraciones', '/informacion', '/inicio-sesion'].includes(
             $route.path
           )
         "

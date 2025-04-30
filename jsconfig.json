@@ -10,9 +10,8 @@
       "@boot/*": ["./src/boot/*"],
       "@assets/*": ["./src/assets/*"],
       "@utils/*": ["./src/utils/*"],
-      "@stores/*": ["./src/stores/*"], 
-      "@router/*": ["./src/router/*"],
-      "@services/*": ["./src/services/*"],
+      "@store/*": ["./src/store/*"], 
+      "@router/*": ["./src/router/*"]
     }
   }
 }

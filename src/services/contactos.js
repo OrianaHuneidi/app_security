@@ -9,17 +9,29 @@ const contactos = {
 
 export default {
   /** data: { fullname: string, telefono: string } */
-  createdConect: async function (data) {
+  createdContact: async function (data) {
     if(data.fullname == "" || data.telefono == "") {
       throw new Error("Los campos no pueden estar vacios");
     }
 
-    Loading.show({
-        spinner: QSpinnerFacebook,
-    });
+    Loading.show({ spinner: QSpinnerFacebook });
 
     return databases
       .createDocument(contactos.id, contactos.collectionId, ID.unique(), data)
+      .finally(() => {
+        Loading.hide();
+      });
+  },
+
+  updatedContact: async function (data) {
+    if(data.$id == "" || data.fullname == "" || data.telefono == "") {
+      throw new Error("Los campos no pueden estar vacios");
+    }
+
+    Loading.show({ spinner: QSpinnerFacebook });
+
+    return databases
+      .updateDocument(contactos.id, contactos.collectionId, data.$id, data)
       .finally(() => {
         Loading.hide();
       });
@@ -30,14 +42,25 @@ export default {
     const limit = paginate.limit || 10;
     const page = (paginate.page || 1)
 
-    Loading.show({
-        spinner: QSpinnerFacebook,
-    });
+    Loading.show({ spinner: QSpinnerFacebook });
+
     return databases
       .listDocuments(contactos.id, contactos.collectionId, [
         Query.limit(limit),
         Query.offset(page - 1),
       ])
+      .finally(() => {
+        Loading.hide();
+      })
+  },
+
+  removeContact: async function (id) {
+    if (!id) throw new Error("El id no puede estar vacio")
+
+    Loading.show({ spinner: QSpinnerFacebook });
+
+    return databases
+      .deleteDocument(contactos.id, contactos.collectionId, id)
       .finally(() => {
         Loading.hide();
       })

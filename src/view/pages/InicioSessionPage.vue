@@ -5,7 +5,15 @@
       @reset.prevent.stop="onReset"
       class="q-gutter-md"
     >
-      <h1 class="text-center text-purple-8 text-h4">Inicio De Sesión</h1>
+      <q-input
+        ref="nameRef"
+        filled
+        v-model="name"
+        label="Name"
+        lazy-rules
+        :rules="nameRules"
+        standout="bg-purple-6 text-white"
+      />
 
       <q-input
         ref="ageRef"
@@ -29,21 +37,19 @@
         standout="bg-purple-6 text-white"
       />
       <div>
-        <q-btn label="Iniciar sesión" type="submit" color="purple-8" />
+        <q-btn label="Submit" type="submit" color="primary" />
         <q-btn
-          label="Borrar"
+          label="Reset"
           type="reset"
-          color="purple-8"
+          color="primary"
           flat
           class="q-ml-sm"
         />
       </div>
-      <div class="q-mt-sm text-center">
-        ¿Aún no te has registrado?
-        <router-link to="/registro" class="text-purple-8 text-weight-medium">
-          Hazlo aquí
-        </router-link>
-      </div>
+      <router-link to="/registro" class="text-primary flex items-center">
+        <q-icon name="person_add" class="q-mr-xs" />
+        <span class="underline-on-hover">Regístrate</span>
+      </router-link>
     </form>
   </div>
 </template>
@@ -64,6 +70,12 @@ export default {
     const accept = ref(false);
 
     return {
+      name,
+      nameRef,
+      nameRules: [
+        (val) => (val && val.length > 0) || "Por favor, escriba algo",
+      ],
+
       age,
       ageRef,
       ageRules: [

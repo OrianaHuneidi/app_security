@@ -73,7 +73,7 @@ export default defineConfig((/* ctx */) => {
           '@pages': path.resolve(__dirname, 'src/view/pages'),
           '@assets': path.resolve(__dirname, 'src/assets'),
           '@boot': path.resolve(__dirname, 'src/boot'),
-          '@stores': path.resolve(__dirname, 'src/stores'),
+          '@store': path.resolve(__dirname, 'src/store'),
           '@router': path.resolve(__dirname, 'src/router'),
           '@utils': path.resolve(__dirname, 'src/utils'),
           '@composable': path.resolve(__dirname, 'src/composable'),
@@ -108,7 +108,7 @@ export default defineConfig((/* ctx */) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Loading', 'Notify', 'Dialog'],
+      plugins: []
     },
 
     // animations: 'all', // --- includes all animations

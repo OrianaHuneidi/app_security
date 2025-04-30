@@ -11,6 +11,16 @@ export default {
       message: "Contacto guardado exitosamente.",
       persistent: true,
     }),
+    contactDeleteSuccess: () => Dialog.create({
+      title: "Éxito",
+      message: "Contacto borrado exitosamente.",
+      persistent: true,
+    }),
+    contactUpdateSuccess: () => Dialog.create({
+      title: "Éxito",
+      message: "Contacto actualizado exitosamente.",
+      persistent: true,
+    }),
     errorCatch: (message) => Dialog.create({
       title: "Error",
       message: message,
