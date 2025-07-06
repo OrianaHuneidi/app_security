@@ -19,7 +19,6 @@
       />
     </div>
     <div>
-      flex
       <q-list class="!py-4">
         <q-item
           class="flex items-start"
@@ -80,12 +79,16 @@
 import DialogAddOrEditeContact from "@components/DialogAddOrEditeContact.vue";
 import menuComposable from "@composable/menu.composable.js";
 import { useContactStore } from "@stores/contacts.js";
+import { useUserStore } from "@stores/users.js";
+import { useConfigStore } from "@stores/config"; // Import useConfigStore
 import { onMounted, reactive, unref } from "vue";
 import notify from "@utils/notify.js";
 import { SessionStorage } from "quasar";
 
 const { toggleLeftDrawer } = menuComposable();
 const contactStore = useContactStore();
+const userStore = useUserStore();
+const configStore = useConfigStore(); // Initialize configStore
 
 const form = reactive({
   $id: "",
@@ -124,10 +127,25 @@ function addContact() {
   dialgos.addOrEditeContact.toggle();
 }
 
-function updateContact(contact) {
-  contactStore
-    .updateContact(contact)
-    .then(() => {
+async function updateContact(contact) {
+  const oldFullname = form.fullname; // Get the old fullname before update
+
+  await contactStore
+    .updateContact({ ...contact, user_id: userStore.current.$id })
+    .then(async () => {
+      // After contact is updated, update related configs
+      await configStore.getList(userStore.current.$id); // Ensure configs are fresh
+      for (const config of configStore.list) {
+        if (
+          (config.value === "Llamada" || config.value === "Mensaje") &&
+          config.option_value === oldFullname
+        ) {
+          await configStore.updateConfig({
+            ...config,
+            option_value: contact.fullname, // Update to new fullname
+          });
+        }
+      }
       notify.contactUpdateSuccess();
     })
     .catch((error) => {
@@ -138,10 +156,30 @@ function updateContact(contact) {
     });
 }
 
-function deleteContact(id) {
-  contactStore
-    .deleteContact(id)
-    .then(() => {
+async function deleteContact(id) {
+  const deletedContact = contactStore.list.find((c) => c.$id === id);
+  if (!deletedContact) {
+    notify.errorCatch("Contacto no encontrado para eliminar.");
+    return;
+  }
+
+  await contactStore
+    .deleteContact(id, userStore.current.$id)
+    .then(async () => {
+      // After contact is deleted, clear related configs
+      await configStore.getList(userStore.current.$id); // Ensure configs are fresh
+      for (const config of configStore.list) {
+        if (
+          (config.value === "Llamada" || config.value === "Mensaje") &&
+          config.option_value === deletedContact.fullname
+        ) {
+          await configStore.updateConfig({
+            ...config,
+            option_value: "", // Clear the option value
+            command: config.command || "", // Keep command or set to empty
+          });
+        }
+      }
       notify.contactDeleteSuccess();
     })
     .catch((error) => {
@@ -155,7 +193,11 @@ async function saveContact(contact) {
     return;
   }
   await contactStore
-    .addContact({ fullname: contact.fullname, telefono: contact.telefono })
+    .addContact({
+      fullname: contact.fullname,
+      telefono: contact.telefono,
+      user_id: userStore.current.$id,
+    })
     .then(() => {
       notify.contactSaveSuccess();
     })
@@ -174,7 +216,7 @@ function clearForm() {
 }
 
 onMounted(async () => {
-  await contactStore.getList();
+  await contactStore.getList(userStore.current.$id);
   if (contactStore.list.length != 0) {
     SessionStorage.set("contacts", contactStore.list);
   }

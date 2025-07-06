@@ -4,6 +4,7 @@
     "": {
       "name": "orisecurity",
       "dependencies": {
+        "@byteowls/capacitor-sms": "^6.0.0",
         "@capacitor/android": "^6.2.0",
         "@capacitor/app": "^6.0.0",
         "@capacitor/cli": "^6.0.0",
@@ -12,6 +13,8 @@
     },
   },
   "packages": {
+    "@byteowls/capacitor-sms": ["@byteowls/capacitor-sms@6.0.0", "", { "peerDependencies": { "@capacitor/core": ">=6" } }, "sha512-njuPeIoEY+mhyB1gOKaWAJb+2J/QHGeTT/dLqbYoY+xMFjYaVz6A0snen1kQBB+7+/z3KR0KmCHjq9e+Xk/0/Q=="],
+
     "@capacitor/android": ["@capacitor/android@6.2.0", "", { "peerDependencies": { "@capacitor/core": "^6.2.0" } }, "sha512-3YIDPylV0Q2adEQ/H568p496QdYG0jK/XGMdx7OGSqdBZen92ciAsYdyhLtyl91UVsN1lBhDi5H6j3T2KS6aJg=="],
 
     "@capacitor/app": ["@capacitor/app@6.0.2", "", { "peerDependencies": { "@capacitor/core": "^6.0.0" } }, "sha512-SiGTGgslK4TbWJVImCUL1odul7/YFkVfkYtAYS9AAEzQpxBECBeRnuN3FFBcfZ9eiN1XxFBFchhiwpxtx/c7yQ=="],

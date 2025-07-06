@@ -26,7 +26,7 @@
         <img
           :src="`https://placehold.co/600x600/white/8F2DFF/?text=${name
             .split(' ')
-            .map((n, i) => (i < 2 ? n[0].toLocaleUpperCase() : ''))
+            .map((n, i) => (i < 2 ? n[0]?.toLocaleUpperCase() : ''))
             .join('')}`"
         />
       </q-avatar>
@@ -47,7 +47,7 @@
 
       <div class="col-12 col-md-6">
         <div class="mt-10 px-10">
-          <b class="text-2xl text-primary">Email</b>
+          <b class="text-2xl text-secondary">Email</b>
 
           <div
             class="text-[#737373] w-full inline-block text-xl mt-3 underline"
@@ -59,7 +59,7 @@
         <div class="w-full flex justify-center items-center mt-5">
           <q-btn
             label="Cambiar contraseña"
-            class="!mt-4 text-purple-9 bg-accent"
+            class="!mt-4 text-purple-9 bg-primary"
             unelevated
             @click="dialogs.password.toggle()"
           />
@@ -241,11 +241,12 @@ const repeatPasswordRules = [
 ];
 
 // Cargar datos del usuario al montar el componente
-onMounted(() => {
-  const currentUser = storeUser.currentUser;
-  if (currentUser) {
-    name.value = currentUser.name;
-    email.value = currentUser.email;
+onMounted(async () => {
+  // The session is already verified by the 'isLogin' middleware in src/router/middlewares/auth.js
+  // No need for a second verification here.
+  if (storeUser.current) {
+    name.value = storeUser.current.name;
+    email.value = storeUser.current.email;
   }
 });
 
@@ -260,6 +261,14 @@ const onSubmitProfile = async () => {
       name: name.value,
     });
 
+    // User data should be updated in the store after updateProfile,
+    // or the middleware ensures it's valid on page load.
+    // No need for a second verification here.
+    if (storeUser.current) {
+      name.value = storeUser.current.name;
+      email.value = storeUser.current.email;
+    }
+
     $q.notify({
       color: "positive",
       message: "Datos actualizados correctamente",
@@ -273,7 +282,9 @@ const onSubmitProfile = async () => {
 };
 
 const onResetProfile = () => {
-  name.value = storeUser.currentUser.name;
+  if (storeUser.current) {
+    name.value = storeUser.current.name;
+  }
   nameRef.value.resetValidation();
 };
 

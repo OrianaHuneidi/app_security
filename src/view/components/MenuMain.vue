@@ -5,7 +5,7 @@
     bordered
     side="right"
     :width="viewportWidth"
-    class="!bg-white !z-[10000] !absolute"
+    class="!bg-white !z-[99999] !absolute"
   >
     <!-- Icono de cierre (X) -->
     <q-btn
@@ -66,7 +66,7 @@ const linksList = [
     link: "/perfil",
   },
   {
-    title: "Configuraciones",
+    title: "Configuración",
     caption: "",
     icon: "",
     link: "/configuraciones",

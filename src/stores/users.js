@@ -4,6 +4,7 @@ import { defineStore } from "pinia";
 export const useUserStore = defineStore("user", {
   state: () => ({
     current: null,
+    isLoaded: false, // Add a flag to indicate if user data has been loaded
   }),
   actions: {
     register: async function (email, password, name) {
@@ -14,25 +15,33 @@ export const useUserStore = defineStore("user", {
         .createEmailPasswordSession(email, password)
         .then(async () => {
           const user = await account.get();
-          this.currentUser = user;
+          this.current = user;
+          this.isLoaded = true; // Set flag to true after successful load
         });
     },
     logout: async function () {
       return await account.deleteSession("current").then(() => {
         this.$reset();
         this.current = null;
+        this.isLoaded = false; // Reset flag on logout
       });
     },
 
     getVerifySession: async function () {
+      if (this.isLoaded && this.current) {
+        return true; // Data already loaded, no need to fetch again
+      }
+
       const session = await account.getSession("current").catch(() => null);
 
       if (session) {
         const user = await account.get();
-        this.currentUser = user;
+        this.current = user;
+        this.isLoaded = true; // Set flag to true after successful load
         return true;
       } else {
         this.current = null;
+        this.isLoaded = false; // Reset flag if no session
         return false;
       }
     },

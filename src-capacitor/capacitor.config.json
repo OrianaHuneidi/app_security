@@ -1,5 +1,14 @@
 {
-  "appId": "org.capacitor.quasar.app",
-  "appName": "Quasar App",
-  "webDir": "www"
+  "appId": "com.myminder.app",
+  "appName": "MyMinder",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "android": {
+    "allowMixedContent": true
+  }
 }
